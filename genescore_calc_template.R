@@ -1,15 +1,12 @@
 #Install Dependencies
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
-# 
 # BiocManager::install("GEOmetadb")
-
 #install.packages('MetaIntegrator')
 library(MetaIntegrator)
 
 #BiocManager::install("batchelor")
 #devtools::install_github("jknightlab/SepstratifieR")
-
 library(SepstratifieR)
 
 #install.packages("tidyverse")
@@ -21,7 +18,7 @@ library(data.table)
 #install.packages("nnet")
 library(nnet)
 
-
+##################
 #Set-Up
 #This will need to be adjusted depending on what directories we will be using. In this case, I have set up a folder subspace and within that I have input and output folders for each individual study
 
@@ -37,7 +34,7 @@ dir_in = paste0("/labs/khatrilab/armoore7/subspace/",sub_id,"/input/")
 #directory for output files
 dir_out = paste0("/labs/khatrilab/armoore7/subspace/",sub_id,"/output/")
 
-
+####################
 #Reads in data
 #requires standardized naming of data. In this case, I used expr, key, pheno
 #data should be set up with first three columns being "ENSEMBL_GENE_ID","ENTREZ_GENE_ID","HGNC_SYM", followed by sample_ids
@@ -47,7 +44,7 @@ key <- read.csv(paste0(dir_in,sub_id,"_key.csv"))
 
 pheno<- read.csv(paste0(dir_in,sub_id,"_pheno.csv"))
 
-
+##################
 #QC for expression data
 #Checks to see if needs to be transformed
 boxplot(expr[,c(4:min(10,dim(expr)[2]))])
@@ -64,7 +61,7 @@ dim(expr)
 View(expr)
 any(is.na(expr[,-c(1:3)]))
 
-
+##################
 #HGNC Gene expression matrix set up
 #creates a hgnc dataset and removes blank HGNC symbols
 hgnc_expr <- expr[,-c(1:2)]%>%
@@ -78,7 +75,7 @@ rownames(hgnc_expr) = hgnc_expr[,1]
 hgnc_expr = hgnc_expr[,-1]
 hgnc_expr = as.matrix(hgnc_expr)
 
-
+##################
 #SEPSRATIFIER SETUP
 #Converts to just the Ensembl gene names, converts gene names to the format needed for sepstratifier
 ensembl_expr <- expr[,-c(2:3)] %>%
@@ -94,9 +91,9 @@ ensembl_expr = ensembl_expr[,-1]
 #transposes data frame to have the ensembl as column names for input into sepstratifier 
 sepstratifier_expr <- t(ensembl_expr)
 
-
-#Basic Functions
-```{r Geometric Mean Function}
+##################
+#Functions
+#Geometric Mean Function
 geomMean <- function(x, na.rm = FALSE){
   if (!is.numeric(x) && !is.complex(x) && !is.logical(x)) {
     warning("argument is not numeric or logical: returning NA")
@@ -114,9 +111,6 @@ geomMean <- function(x, na.rm = FALSE){
       return(0)
     }
   }
-  
-  ### direct method causes overflow errors, use log method instead
-  ### return(prod(x)^(1/length(x)))
   return(exp(sum(log(x))/length(x)))
 }
 
@@ -163,8 +157,8 @@ getGeneScores <- function(geneMtx, pos, neg, makePos = TRUE, out.missing=TRUE){
   return(scores)
 }
 
-
-#SoM Score
+##################
+#Calculates Zheng (SoM) Scores
 #SoM modules
 mod1 = c("NQO2","SLPI","ORM1","KLHL2","ANXA3","TXN","AQP9","BCL6","DOK3","PFKFB4","TYK2")
 mod2 = c("BCL2L11","BCAT1","BTBD7","CEP55","HMMR","PRC1","KIF15","CAMP","CEACAM8","DEFA4","LCN2","CTSG","AZU1")
@@ -210,7 +204,7 @@ zheng_table = full_join(mod1_table,mod2_table, by = "accession") %>%
   full_join(.,som_score_table, by = "accession")%>%
   mutate(zheng_endotype = ifelse(som_score >= 1, "detrimental","protective"))
 
-
+##################
 #Sweeney Endotypes
 #the endotype genes
 inflammopathic.up= c("ARG1","LCN2","LTF","OLFM4")
@@ -294,7 +288,8 @@ sweeney_table  <- sweeney_table  %>%
   select(-c("score1","score2","score3","endoProbs.1","endoProbs.2","endoProbs.3","endotype"))
 ```
 
-```{r davenport and cano-gamez scores}
+##################
+#Davenport and Cano-Gamez Scores using Sepstratifier
 davenport_scores <- stratifyPatients(sepstratifier_expr,gene_set = "davenport", k = 20)
 
 cano_scores <- stratifyPatients(sepstratifier_expr,gene_set = "extended", k = 20)
@@ -305,7 +300,7 @@ cano_table<-data.frame(accession = names(cano_scores@SRS),cano_endotype = cano_s
 
 srs_table = full_join(davenport_table,cano_table, by = "accession")
 
-
+##################
 #Yao Score
 #Yao Score genes
 yao_IA_up <- c("ZNF831", "CD3G", "MME", "BTN3A2", "HLA-DPA1")
@@ -333,7 +328,7 @@ yao_IC_table<-data.table(names(yao_IC_score),yao_IC_score) %>%
 yao_table = full_join(yao_IA_table,yao_IC_table, by = "accession") %>%
   full_join(.,yao_IN_table, by = "accession")
 
-
+##################
 #Wong Score
 #is a geometric mean of all 100 genes
 wong_genes = c("APAF1", "ARPC5","ASAH1","ATP2B2","BCL6","BMPR2","BTK","CAMK2D","CAMK2G","CAMK4","CASP1","CASP2","CASP4","CASP8","CD247","CD3E","CD3G","CD79A",
@@ -369,6 +364,8 @@ wong_table <- (wong_int1 - wong_int1[,"geomean"])^2 %>%
          accession = rownames(wong_int2))%>%
   select("accession","wong_score","wong_endotype")
 
+
+##################
 #MARS SCORES
 #Identifies the MARS genes
 mars1_up = c("BPGM")
@@ -432,7 +429,7 @@ mars_table<- full_join(mars1_table, mars2_table, by = "accession") %>%
   unite(.,col = mars_endotype,cluster_1,cluster_2,cluster_3,cluster_4, sep = "/",remove = TRUE,na.rm = TRUE)
 
 
-
+##################
 #r pools the score tables
 score_table <- full_join(zheng_table, sweeney_table, by = "accession") %>%
   full_join(.,yao_table, by = "accession")%>%
