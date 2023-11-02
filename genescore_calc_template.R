@@ -278,7 +278,7 @@ sweeney_table  <- sweeney_table  %>%
   left_join(.,probs, by = "accession")%>%
   mutate(inflammopathic_score = score1,
          adaptive_score = score2,
-         coagulopathic_scorte = score3,
+         coagulopathic_score = score3,
          inflammopathic_prob = endoProbs.1,
          adaptive_prob = endoProbs.2,
          coagulopathic_prob = endoProbs.3,
