@@ -286,7 +286,6 @@ sweeney_table  <- sweeney_table  %>%
                                    ifelse(endotype == 2, "adaptive",
                                           ifelse(endotype == 3,"coagulopathic",NA))))%>%
   select(-c("score1","score2","score3","endoProbs.1","endoProbs.2","endoProbs.3","endotype"))
-```
 
 ##################
 #Davenport and Cano-Gamez Scores using Sepstratifier
