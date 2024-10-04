@@ -26,13 +26,13 @@ library(nnet)
 sub_id = "study_id"
 
 #subspace directory
-dir_main = paste0("/labs/khatrilab/armoore7/subspace/")
+dir_main = paste0("~/subspace/")
 
 #directory for input files
-dir_in = paste0("/labs/khatrilab/armoore7/subspace/",sub_id,"/input/")
+dir_in = paste0("~/subspace/",sub_id,"/input/")
 
 #directory for output files
-dir_out = paste0("/labs/khatrilab/armoore7/subspace/",sub_id,"/output/")
+dir_out = paste0("~/subspace/",sub_id,"/output/")
 
 ####################
 #Reads in data
