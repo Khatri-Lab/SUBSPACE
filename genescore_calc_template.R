@@ -22,8 +22,8 @@ library(nnet)
 #Set-Up
 #This will need to be adjusted depending on what directories we will be using. In this case, I have set up a folder subspace and within that I have input and output folders for each individual study
 
-#ID for whichever biobank we're running analysis in. in this case it's savemore
-sub_id = "savemore"
+#ID for whichever biobank we're running analysis in. 
+sub_id = "study_id"
 
 #subspace directory
 dir_main = paste0("/labs/khatrilab/armoore7/subspace/")
@@ -332,7 +332,7 @@ yao_table = full_join(yao_IA_table,yao_IC_table, by = "accession") %>%
 #is a geometric mean of all 100 genes
 wong_genes = c("APAF1", "ARPC5","ASAH1","ATP2B2","BCL6","BMPR2","BTK","CAMK2D","CAMK2G","CAMK4","CASP1","CASP2","CASP4","CASP8","CD247","CD3E","CD3G","CD79A",
                "CREB1","CREB5","CSNK1A1","CTNNB1","DAPP1","DBT","EP300","FAS","FCGR2A","FCGR2C","FYN","GK","GNAI3","HDAC4","HLA-DMA","HLA-DOA","ICAM3","IL1A",
-               "INPP5D","ITGAM","ITGAV","ITGAX","JAK1","JAK2","KAT2B","LAT2","LYN","MAP2K4","MAP3K1","MAP3K3","MAP3K5","MAP3K7","MAP4K1","MAPK14","MDH1","MKNK1",
+               "INPP5D","ITGAM","ITGAV","ITGAX","JAK1","JAK2","KAT2B","LAT2","LYN","MAP2K4","MAP3K1","MAP3K3","MAP3K5","MAP3K7","MAP4K1","MAP4K4", "MAPK1","MAPK14","MDH1","MKNK1",
                "NCOA2","NCR3","NFATC1","PAK2","PDPR","PIAS1","PIK3C2A","PIK3C3","PIK3CA","PIK3CD","PIK3R1","PLCG1","POU2F2","PPP1R12A","PPP2R2A","PPP2R5C",
                "PRKAR1A","PRKCB","PSMB7","PTEN","PTPRC","RAF1","RHOT1","ROCK1","SEMA4F","SEMA6B","SMAD4","SOS1","SOS2","SP1","TAF11","TBK1","TGFBR1","TLE4",
                "TLR1","TLR2","TLR8","TNFSF10","TRA@","TYROBP","UBE3A","USP48","ZAP70","ZDHHC17")
@@ -359,9 +359,8 @@ wong_int1 <- data.frame(t(wong_expr)) %>%
 
 wong_table <- (wong_int1 - wong_int1[,"geomean"])^2 %>%
   mutate(wong_score = rowSums(.)/1000000,
-         wong_endotype = ifelse(wong_score<=401,"A","B"), #Cut-off is <=401 means class A
          accession = rownames(wong_int2))%>%
-  select("accession","wong_score","wong_endotype")
+  select("accession","wong_score")
 
 
 ##################
@@ -429,11 +428,57 @@ mars_table<- full_join(mars1_table, mars2_table, by = "accession") %>%
 
 
 ##################
+myeloid_detrimental_genes <- c('ANXA3', 'ARG1', 'AZU1', 'CAMP', 'CEACAM8', 'CEP55', 'CRISP2', 'CTSG', 'DEFA4', 'GADD45A', 'HMMR', 'KIF15', 'LCN2', 'LTF', 'OLFM4', 'ORM1', 'PRC1', 'SLPI', 'STOM', 'AQP9', 'BCL6', 'KLHL2', 'PPL', 'HTRA1', 'TYK2', 'SLC1A5', 'STX1A')
+
+neutrophil_protective_genes <- c('ZDHHC17', 'FAS', 'GK', 'ICAM3', 'MME', 'PDE4B', 'PIK3CD', 'PTEN', 'RAF1', 'TLR1', 'PPP1R12A', 'MAPK14', 'SOS2', 'TXN')
+
+monocyte_protective_genes <- c('ASAH1', 'ATG3', 'BCAT1', 'BCL2L11', 'BTK', 'BTN2A2', 'CASP1', 'CCL2', 'CREB1', 'EP300', 'GNAI3', 'IL1A', 'JAK2', 'MAFB', 'MAP3K1', 'MAP3K3', 'PAK2', 'PLEKHO1', 'POU2F2', 'PRKAR1A', 'PRKCB', 'RHBDF2', 'SEMA6B', 'SP1', 'TLE4', 'BMPR2', 'CTNNB1', 'INPP5D', 'ITGAV', 'SLC12A7', 'TBK1', 'VAMP5', 'VRK2', 'YKT6')
+
+lymphoid_protective_genes <- c('ARL14EP', 'BPGM', 'BTN3A2', 'BUB3', 'CAMK4', 'CASP8', 'CCNB1IP1', 'CD247', 'CD3E', 'CD3G', 'DBT', 'DDX6', 'DYRK2', 'JAK1', 'KLRB1', 'MAP4K1', 'NCR3', 'PIK3R1', 'PLCG1', 'PPP2R5C', 'SEMA4F', 'SIDT1', 'SMAD4', 'SMYD2', 'TP53BP1', 'TRIB2', 'ZAP70', 'ZCCHC4', 'ZNF831')
+
+
+myeloid_score = getGeneScores(hgnc_expr,pos=c(myeloid_detrimental_genes),neg = c(neutrophil_protective_genes, monocyte_protective_genes))
+myeloid_table <- data.table(names(myeloid_score),myeloid_score)%>%
+  setnames("V1","accession")
+
+myeloid_detrimental_score = getGeneScores(hgnc_expr,pos=c(myeloid_detrimental_genes),neg = c())
+myeloid_detrimental_table <- data.table(names(myeloid_detrimental_score),myeloid_detrimental_score)%>%
+  setnames("V1","accession")
+
+neutrophil_protective_score = getGeneScores(hgnc_expr,pos=neutrophil_protective_genes,neg = c())
+neutrophil_protective_table <- data.table(names(neutrophil_protective_score),neutrophil_protective_score)%>%
+  setnames("V1","accession")
+
+monocyte_protective_score = getGeneScores(hgnc_expr,pos=monocyte_protective_genes,neg = c())
+monocyte_protective_table <- data.table(names(monocyte_protective_score),monocyte_protective_score)%>%
+  setnames("V1","accession")
+
+myeloid_protective_score = getGeneScores(hgnc_expr,pos=c(neutrophil_protective_genes, monocyte_protective_genes),neg = c())
+myeloid_protective_table <- data.table(names(myeloid_protective_score),myeloid_protective_score)%>%
+  setnames("V1","accession")
+
+lymphoid_score = getGeneScores(hgnc_expr,pos=c(),neg = c(lymphoid_protective_genes))
+lymphoid_table <- data.table(names(lymphoid_score),lymphoid_score)%>%
+  setnames("V1","accession")
+
+lymphoid_protective_score = getGeneScores(hgnc_expr,pos=lymphoid_protective_genes,neg = c())
+lymphoid_protective_table <- data.table(names(lymphoid_protective_score),lymphoid_protective_score)%>%
+  setnames("V1","accession")
+
+consensus_scores = full_join(myeloid_detrimental_table,neutrophil_protective_table, by = "accession") %>%
+  full_join(.,monocyte_protective_table, by = "accession") %>%
+  full_join(.,myeloid_protective_table, by = "accession")%>%
+  full_join(.,lymphoid_protective_table, by = "accession") %>%
+  full_join(.,lymphoid_table, by = "accession") %>%
+  full_join(.,myeloid_table, by = "accession") 
+
+##################
 #r pools the score tables
 score_table <- full_join(zheng_table, sweeney_table, by = "accession") %>%
   full_join(.,yao_table, by = "accession")%>%
   full_join(.,srs_table, by = "accession")%>%
   full_join(.,wong_table, by = "accession") %>%
-  full_join(.,mars_table, by = "accession")
+  full_join(.,mars_table, by = "accession")%>%
+  full_join(.,consensus_scores, by = "accession")
 
 write.csv(score_table, file = paste0(dir_out,sub_id,"_score_table.csv"))
