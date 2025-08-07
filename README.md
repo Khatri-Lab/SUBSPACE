@@ -23,7 +23,7 @@ The key goals of the SUBSPACE consortium in using this data is to:
 
 •	vanish_score_table.csv: the scores created from VANISH public data
 
-•	single_cell_scores_seurat.RDS: integrated Seurat object used for single cell analyses
+•	single cell data - This data is available at Zenodo at: https://zenodo.org/records/16759647
 
 # Code:
 •	subspace_load_data.R: Code sourced to load the necessary data and libraries.
