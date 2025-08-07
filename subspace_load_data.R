@@ -32,8 +32,6 @@ library(ggforce)
 library(grid)
 library(gridExtra)
 
-?margin()
-
 ###############################################################
 base_text_size <- 10
 base_font_family <- "Helvetica"
