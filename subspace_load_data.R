@@ -155,12 +155,12 @@ vanish <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/h
   mutate(high_myeloid = ifelse(myeloid_score >= quantile(myeloid_score, probs = 0.5), "high", "low"),
          high_lymphoid = ifelse(lymphoid_score >= quantile(lymphoid_score, probs = 0.5), "high", "low"),
          subgroup = ifelse(high_myeloid == "high" & high_lymphoid == "high", "system-wide",
-                           ifelse(high_myeloid == "high", "myeloid dysregulation",
-                                  ifelse(high_lymphoid == "high", "lymphoid dysregulation", "balanced"))),
+                           ifelse(high_myeloid == "high", "myeloid",
+                                  ifelse(high_lymphoid == "high", "lymphoid", "balanced"))),
          d28_death_yn = ifelse(Characteristics.outcome.day.28. == "Dead", 1, ifelse(Characteristics.outcome.day.28. == "Alive", 0,NA)),
          treatment = ifelse(Characteristics.drug2.per.protocol. == "Hydrocortisone", "hydrocortisone", "no hydrocortisone"),
          lymphoid_score = scale(lymphoid_score))
 
-vanish$subgroup = factor(vanish$subgroup, levels = c("immunocompetent","lymphoid dysregulation", "myeloid dysregulation","hyperinflammatory"))
+vanish$subgroup = factor(vanish$subgroup, levels = c("balanced","lymphoid", "myeloid","system-wide"))
 vanish$high_lymphoid = factor(vanish$high_lymphoid, levels = c("low","high"))
 vanish$high_myeloid = factor(vanish$high_myeloid, levels = c("low","high"))
