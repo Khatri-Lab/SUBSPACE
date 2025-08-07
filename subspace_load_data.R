@@ -1,6 +1,7 @@
 library(tidyverse)
 library(data.table)
 library(pals)
+#devtools::install_github('raredd/rawr', force = TRUE)
 library(rawr)
 library(RColorBrewer)
 library(pROC)
