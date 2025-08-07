@@ -6,4 +6,4 @@ The key goals of the SUBSPACE consortium in using this data is to:
 2) Integrate these sepsis endotyping schema to identify commonalities and develop overarching consensus endotypes
 3) Evaluate the clinical implications of these endotypes
 4) Identify the underlying biology of these endotypes by integrating multi-omic data
-5) Develop a simplified consensus endotyping scores to be developed into diagnostic, prognostic, and therapeutic tests
+5) Develop a simplified consensus endotyping scores to better evaluate the host response to infection
