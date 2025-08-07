@@ -201,8 +201,7 @@ zheng_table = full_join(mod1_table,mod2_table, by = "accession") %>%
   full_join(.,mod4_table, by = "accession")%>%
   full_join(.,detrimental_score_table, by = "accession")%>%
   full_join(.,protective_score_table, by = "accession")%>%
-  full_join(.,som_score_table, by = "accession")%>%
-  mutate(zheng_endotype = ifelse(som_score >= 1, "detrimental","protective"))
+  full_join(.,som_score_table, by = "accession")
 
 ##################
 #Sweeney Endotypes
@@ -406,25 +405,20 @@ getGeneScores_mars <- function(geneMtx, pos, neg, makePos = TRUE, out.missing=TR
 }
 
 mars1_score = getGeneScores_mars(hgnc_expr,pos=mars1_up,mars1_down)
-mars1_table<-data.frame(accession = colnames(mars1_score), mars1_score = mars1_score[1,])%>%
-  mutate(cluster_1 = ifelse(mars1_score >= 1.15, "MARS1",NA))
+mars1_table<-data.frame(accession = colnames(mars1_score), mars1_score = mars1_score[1,])
 
 mars2_score = getGeneScores_mars(hgnc_expr,pos=mars2_up,mars2_down)
-mars2_table<-data.frame(accession = colnames(mars2_score), mars2_score = mars2_score[1,]) %>%
-  mutate(cluster_2 = ifelse(mars2_score >= 1.05, "MARS2",NA))
+mars2_table<-data.frame(accession = colnames(mars2_score), mars2_score = mars2_score[1,]) 
 
 mars3_score = getGeneScores_mars(hgnc_expr,pos=mars3_up,mars3_down)
-mars3_table<-data.frame(accession = colnames(mars3_score), mars3_score = mars3_score[1,]) %>%
-  mutate(cluster_3 = ifelse(mars3_score >= 1.03, "MARS3",NA))
+mars3_table<-data.frame(accession = colnames(mars3_score), mars3_score = mars3_score[1,]) 
 
 mars4_score = getGeneScores_mars(hgnc_expr,pos=mars4_up,mars4_down)
-mars4_table<-data.frame(accession = colnames(mars4_score), mars4_score = mars4_score[1,]) %>%
-  mutate(cluster_4 = ifelse(mars4_score >= 0.57, "MARS4",NA))
+mars4_table<-data.frame(accession = colnames(mars4_score), mars4_score = mars4_score[1,]) 
 
 mars_table<- full_join(mars1_table, mars2_table, by = "accession") %>%
   full_join(., mars3_table, by = "accession") %>%
-  full_join(., mars4_table, by = "accession") %>%
-  unite(.,col = mars_endotype,cluster_1,cluster_2,cluster_3,cluster_4, sep = "/",remove = TRUE,na.rm = TRUE)
+  full_join(., mars4_table, by = "accession") 
 
 
 ##################
