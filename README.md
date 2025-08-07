@@ -31,3 +31,5 @@ The key goals of the SUBSPACE consortium in using this data is to:
 •	tpm_normalization.R: Template used for tpm normalization of count data (this is upstream of datasets provided and is provided for reference only)
 
 •	genescore_calc_template.R: The template used to calculate signature scores. Note for public genesets, did not have genes needed for davenport and cano-gamez SRS scores (this is upstream of score_tables and utilizes genes tables)
+
+•	figures - code used to generate each figure
