@@ -49,12 +49,12 @@ order <- c("SoM Mod 2","Inflammopathic","SoM Mod 1", "Yao Innate","SoM Mod 3","S
 pca_ggplot <- pca$data %>%
   ggplot(aes(x = x, y = y, color = factor(cluster))) +
   geom_point() +
-  scale_color_manual(values = c("1" = "#F3766E", "2" = "#7CAF41", "3" = "#1CBDC2", "4" = "#A781BA")) +  # Adjust colors as needed
+  scale_color_manual(values = c("1" = "#F47B00", "2" = "#80C684", "3" = "#40A1FF", "4" = "#A781BA")) +  # Adjust colors as needed
   #add labels to each point
   geom_text(aes(label = rownames(pca$data)), hjust = 0, vjust = 0, color = "black") +
   #add circle around the clusters
   geom_polygon(data = pca$data[order,], aes(x = x, y = y, group = cluster, fill = factor(cluster)), alpha = 0.2) +
-  scale_fill_manual(values = c("#F3766E", "#7CAF41", "#1CBDC2", "#A781BA")) +
+  scale_fill_manual(values = c("#F47B00", "#80C684", "#40A1FF", "#A781BA")) +
   theme(legend.position = "none")+
   xlab("PCA1 (28.6%)")+
   ylab("PCA2 (22.2%)")
