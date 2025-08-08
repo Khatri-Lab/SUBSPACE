@@ -1,3 +1,5 @@
+######This code is provided for example to illustrate normalization technique for SUBSPACE data and is not executable######
+
 # packages and functions
 library(dplyr)
 
