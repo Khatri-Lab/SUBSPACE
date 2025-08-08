@@ -152,9 +152,3 @@ plot(graph_data,
      edge.width=E(graph_data)$width,
      
      layout=layout_with_fr)
-
-
-
-
-
-```
