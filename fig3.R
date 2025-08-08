@@ -317,4 +317,3 @@ gene_heatmap = Heatmap(mat.expr,
 
 
 print(gene_heatmap)
-print(pht)
