@@ -725,5 +725,3 @@ subspace_threshold_dotplot_group <- ggplot(subspace_groups, aes(x = myeloid_z_sc
 
 
 subspace_threshold_dotplot_group
-
-g
