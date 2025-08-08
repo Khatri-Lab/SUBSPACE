@@ -108,7 +108,7 @@ trail.sigfig <- function(x, ndig = 2)
   return(output)
 }
 
-public_score_table <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/main/public_score_table.csv")%>%
+public_score_table <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/main/Data/public_score_table.csv")%>%
   filter(!is.na(Etiology))
 
 public_score_table$subgroup = factor(public_score_table$subgroup, levels = c("balanced","lymphoid dysregulation", "myeloid dysregulation","system-wide"))
@@ -116,7 +116,7 @@ public_score_table$subgroup = factor(public_score_table$subgroup, levels = c("ba
 public_score_table$severity_grades <- factor(public_score_table$severity_grades, levels = c("Healthy", "Non-Severe", "Severe", "Fatal"))
 
 
-scores_w_pheno <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/subspace_score_table.csv")
+scores_w_pheno <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/Data/subspace_score_table.csv")
 
 scores_w_pheno$subgroup = factor(scores_w_pheno$subgroup, levels = c("balanced","lymphoid dysregulation", "myeloid dysregulation","system-wide"))
 scores_w_pheno$severity_grades <- factor(scores_w_pheno$severity_grades, levels = c("Healthy", "Non-Severe", "Severe", "Fatal"))
@@ -145,14 +145,14 @@ savemore <- scores_w_pheno%>%
 ufl <- scores_w_pheno%>%
   filter(site == "ufl")
 
-glue <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/glue_score_table.csv")
+glue <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/Data/glue_score_table.csv")
 
-messi <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/messi_score_table.csv")%>%
+messi <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/Data/messi_score_table.csv")%>%
   mutate(subgroup = tolower(subgroup))
 
 messi$subgroup = factor(messi$subgroup, levels = c("balanced","lymphoid dysregulation", "myeloid dysregulation","system-wide"))
 
-vanish <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/vanish_score_table.csv")%>%
+vanish <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/Data/vanish_score_table.csv")%>%
   mutate(high_myeloid = ifelse(myeloid_score >= quantile(myeloid_score, probs = 0.5), "high", "low"),
          high_lymphoid = ifelse(lymphoid_score >= quantile(lymphoid_score, probs = 0.5), "high", "low"),
          subgroup = ifelse(high_myeloid == "high" & high_lymphoid == "high", "system-wide",
