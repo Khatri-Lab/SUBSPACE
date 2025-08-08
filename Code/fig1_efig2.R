@@ -1,7 +1,7 @@
 
 set.seed(777)
 
-source("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/main/subspace_load_data.R")
+source("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/Code/subspace_load_data.R")
 
 ########Builds matrix for clustering########
 clustering_scores = c("mod1_score","mod2_score","mod3_score","mod4_score","inflammopathic_score","adaptive_score","coagulopathic_score","yao_IA_score","yao_IC_score","yao_IN_score",
