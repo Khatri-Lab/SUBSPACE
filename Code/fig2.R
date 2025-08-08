@@ -1,6 +1,6 @@
 set.seed(777)
 
-source("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/main/subspace_load_data.R")
+source("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/main/Code/subspace_load_data.R")
 
 
 ##########Prep data############
