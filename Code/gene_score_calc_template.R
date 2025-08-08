@@ -10,7 +10,7 @@ library(biomaRt)
 library(org.Hs.eg.db)
 
 
-data <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/subspace_genes.csv")
+data <- read.csv("https://raw.githubusercontent.com/Khatri-Lab/SUBSPACE/refs/heads/main/Data/subspace_genes.csv")
 
 expr <-data[,-1]
 
