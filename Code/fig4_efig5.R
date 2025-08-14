@@ -75,7 +75,7 @@ public_subgroup_severity_plot <- ggplot(prop_public_subgroup_severity, aes(x = s
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-  scale_fill_manual(values = c("balanced" = "#999999", "lymphoid dysregulation" = "#B0A4E3", "myeloid dysregulation" = "lightskyblue", "hyperinflammatory" = "#F47B00"))+
+  scale_fill_manual(values = c("balanced" = "#999999", "lymphoid dysregulation" = "#B0A4E3", "myeloid dysregulation" = "lightskyblue", "system-wide" = "#F47B00"))+
   #adjust labels of x axis to capitalize words
   scale_x_discrete(labels = function(x) stringr::str_to_title(x)) +
   theme(axis.text.x = element_blank())+
@@ -361,7 +361,7 @@ severity_prop_all_subgroup_barplot <- ggplot(severity_prop_all_subgroup, aes(x =
   geom_bar(stat = "identity") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-  scale_fill_manual(values = c("balanced" = "#999999", "lymphoid dysregulation" = "#B0A4E3", "myeloid dysregulation" = "lightskyblue", "hyperinflammatory" = "#F47B00"))+
+  scale_fill_manual(values = c("balanced" = "#999999", "lymphoid dysregulation" = "#B0A4E3", "myeloid dysregulation" = "lightskyblue", "system-wide" = "#F47B00"))+
   #adjust labels of x axis to capitalize words
   scale_x_discrete(labels = function(x) stringr::str_to_title(x)) +
   theme(legend.position = "none")+
